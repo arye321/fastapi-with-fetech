@@ -2,7 +2,7 @@
 <html>
 <body>
 
-<h2>HTML Forms2</h2>
+<h2>HTML Forms1</h2>
 <div class="content">
     <form id="myForm" onsubmit="event.preventDefault(); submited();">
         <label for="fname">First name:</label><br>
@@ -14,19 +14,18 @@
 <script>
 
     function submited() {
-        
+        const txt = document.getElementById("fname").value
+        console.log(txt)
         console.log('submite')
-        const login = "https://arye321-fastapi-with-fetech-x5jggrp5cp4v4-8000.githubpreview.dev/test";
+        const login = "https://arye321-fastapi-with-fetech-x5jggrp5cp4v4-8000.githubpreview.dev/auth/token";
 
         fetch(login, {
             method: "POST",
             headers: {
             Accept: "application/json, text/plain, */*",
-            "Content-Type": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded",
             },
-            body: JSON.stringify({
-            username: "asdf",
-            }),
+            body: `username=${txt}&password=${txt}`,
         })
             .then((response) =>response.json()).then(x=>{console.log(x)})
             }
