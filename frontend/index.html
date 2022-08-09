@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>HTML Forms2</h2>
+<div class="content">
+    <form id="myForm" onsubmit="event.preventDefault(); submited();">
+        <label for="fname">First name:</label><br>
+        <input type="text" id="fname" name="fname" value="John"><br>
+        <input type="submit" value="Submit">
+    </form> 
+</div>
+</body>
+<script>
+
+    function submited() {
+        
+        console.log('submite')
+        const login = "https://arye321-fastapi-with-fetech-x5jggrp5cp4v4-8000.githubpreview.dev/test";
+
+        fetch(login, {
+            method: "POST",
+            headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+            username: "asdf",
+            }),
+        })
+            .then((response) =>response.json()).then(x=>{console.log(x)})
+            }
+
+ </script>
+<style>
+    .content {        
+        
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    input { font-size: 20px; }
+</style>
+</html>
+
