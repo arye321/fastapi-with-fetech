@@ -1,3 +1,5 @@
+#uvicorn main:app --reload
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -17,7 +19,7 @@ todos = [
 app = FastAPI()
 
 origins = [
-    "https://arye321-fastapi-with-fetech-x5jggrp5cp4v4-5501.githubpreview.dev"
+    "https://arye321-fastapi-with-fetech-q7w55v47hxv9x-3000.githubpreview.dev"
 ]
 
 
