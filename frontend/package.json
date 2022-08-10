@@ -1,12 +1,14 @@
 {
   "name": "frontend",
-  "proxy":"https://arye321-fastapi-with-fetech-q7w55v47hxv9x-8000.githubpreview.dev",
+  "proxy": "https://arye321-fastapi-with-fetech-q7w55v47hxv9x-8000.githubpreview.dev",
   "version": "0.1.0",
   "private": false,
   "dependencies": {
+    "@react-oauth/google": "^0.2.6",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "jwt-decode": "^3.1.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",

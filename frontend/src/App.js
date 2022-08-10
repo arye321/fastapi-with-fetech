@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import './App.css';
+import GoogleLoginMain from "./GoogleLoginMain";
 
 function App() {
   const [user, setuser] = useState('xd');
@@ -26,9 +27,6 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        
-      <h1>1count: {count}</h1>
-
       <div className='formdiv'>
           <form onSubmit={submited}>
             <label htmlFor="fname">First name:</label><br/>
@@ -36,6 +34,8 @@ function App() {
                 <input type="submit" value="Submit"/>
           </form>
         </div>
+      <GoogleLoginMain />
+
       </header>
     </div>
   );
