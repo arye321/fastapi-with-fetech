@@ -1,19 +1,11 @@
 #uvicorn main:app --reload
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 
+from dotenv import load_dotenv
 
-todos = [
-    {
-        "id": "1",
-        "item": "Read a book."
-    },
-    {
-        "id": "2",
-        "item": "Cycle around town."
-    }
-]
+load_dotenv()
 
 
 app = FastAPI()
@@ -43,3 +35,10 @@ async def read_root() -> dict:
 async def test(username: dict):
     
     return f"lol {username}"
+
+
+@app.post("/cookie")
+def create_cookie(response: Response,username: dict):
+    print(username)
+    response.set_cookie(key="fakesession", value="fake-cookie-session-value")
+    return {"message": "Come to the dark side, we have cookies"}

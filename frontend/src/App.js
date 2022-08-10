@@ -8,23 +8,26 @@ function App() {
   const submited = async (e) =>{
     e.preventDefault();
     setCount(count+1)
-    await fetch('https://arye321-fastapi-with-fetech-q7w55v47hxv9x-8000.githubpreview.dev/test', {
-      method:"POST",
-      headers:{
-          'Content-Type':'application/json',
-      },
-      body:JSON.stringify({
-        username: "asdf"
-        })
-    }).then((res)=>res).then(res=>{
+    await fetch('/cookie', {
+      method: "POST",
+            headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+            username: "asdf",
+            }),
+    }).then((res)=>res.json()).then(res=>{
       console.log(res)
+      
     })
     
   }
   return (
     <div className="App">
       <header className="App-header">
-      <h1>count: {count}</h1>
+        
+      <h1>1count: {count}</h1>
 
       <div className='formdiv'>
           <form onSubmit={submited}>
