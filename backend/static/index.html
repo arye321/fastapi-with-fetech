@@ -1,44 +1,62 @@
 <!DOCTYPE html>
 <html>
 <body>
-
-<h2>HTML Forms2</h2>
 <div class="content">
-    <form id="myForm" onsubmit="event.preventDefault(); submited();">
-        <label for="fname">First name:</label><br>
+
+    <form id="myForm" onsubmit="event.preventDefault(); login();">
+        <label for="fname">Login</label><br>
         <input type="text" id="fname" name="fname" value="John"><br>
-        <input type="submit" value="Submit">
+        <input type="submit" value="Login">
+    </form> 
+   
+    
+    <form id="myForm2" onsubmit="event.preventDefault(); auth();">
+        <label for="fname">Auth</label><br>
+        <!-- <input type="text" id="fname" name="fname" value="John"><br> -->
+        <input type="submit" value="Auth">
     </form> 
 </div>
 </body>
 <script>
 
-    function submited() {
-        
-        console.log('submite')
-        const login = "/cookie";
-
+    function login() {
+        var txt = document.getElementById('fname').value
+        console.log('login')
+        const login = "/auth/token";
+        const formData = new FormData();
+        formData.append("username",txt)
+        formData.append("password",txt)
         fetch(login, {
             method: "POST",
-            headers: {
-            Accept: "application/json, text/plain, */*",
-            "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-            username: "asdf",
-            }),
+            body: formData
         })
             .then((response) =>response.json()).then(x=>{console.log(x)})
-            }
+    }
+    function auth() {
+        
+        console.log('auth')
+        const login = "/protected";
 
+        fetch(login, {
+            method: "GET"
+        })
+            .then((response) =>response.json()).then(x=>{console.log(x)})
+    }
  </script>
 <style>
+    #myForm2{
+        padding: 40px;
+    }
     .content {        
         
-      position: absolute;
-      top: 30%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+        background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
     }
     input { font-size: 20px; }
 </style>

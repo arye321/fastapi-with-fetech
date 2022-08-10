@@ -2,37 +2,52 @@
 from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import FileResponse 
+"""
+Trying fastapi_login package :)
+"""
+from datetime import timedelta
+
+from fastapi import FastAPI, Depends
+from fastapi.security import OAuth2PasswordRequestForm
+from fastapi_login.exceptions import InvalidCredentialsException
+from fastapi_login import LoginManager
+from starlette.responses import Response
+SECRET = 'f691b8d9c25109a525637a43d9b6399565cd7437f0c8bdb8'
 
 app = FastAPI()
-# app.mount("/", StaticFiles(directory="static",html = True), name="static")
-
-# origins = [
-#     "https://arye321-fastapi-with-fetech-x5jggrp5cp4v4-5501.githubpreview.dev"
-# ]
+fake_db = {'asdf': {'password': 'asdf'}}
 
 
-# app.add_middleware(
-#         CORSMiddleware,
-#         allow_origins=origins,
-#         allow_credentials=True,
-#         allow_methods=["*"],
-#         allow_headers=["*"]
-# )
+manager = LoginManager(SECRET, token_url='/auth/token', use_cookie=True)
 
-@app.post("/cookie")
-def create_cookie(response: Response,username: dict):
-    print(username)
-    response.set_cookie(key="fakesession", value="fake-cookie-session-value")
-    return {"message": "Come to the dark side, we have cookies"}
+@manager.user_loader()
+def load_user(email: str):  # could also be an asynchronous function
+    user = fake_db.get(email)
+    return user
+
+@app.post('/auth/token')
+def login(response: Response,data: OAuth2PasswordRequestForm = Depends()):
+    email = data.username
+    password = data.password
+
+    user = load_user(email)  # we are using the same function to retrieve the user
+    if not user:
+        raise InvalidCredentialsException  # you can also use your own HTTPException
+    elif password != user['password']:
+        raise InvalidCredentialsException
+    short_token = manager.create_access_token(
+        data=dict(sub=email), expires=timedelta(minutes=1)
+    )
+    manager.set_cookie(response, short_token)
+    return {'access_token': short_token, 'token_type': 'bearer'}
+
+@app.get('/protected')
+def protected_route(user=Depends(manager)):
+    return f"user: {user}"
+
 
 @app.get("/")
 async def read_root() -> dict:
     # return {"message": "Welcome to your todo list."}
     return FileResponse('static/index.html')
 
-
-
-
-@app.post("/test")
-async def test(username: dict):
-    return f"lol {username}"
