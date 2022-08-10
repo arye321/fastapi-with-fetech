@@ -1,11 +1,16 @@
 #uvicorn main:app --reload
-
+import os
 from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 from dotenv import load_dotenv
-
+import motor.motor_asyncio
 load_dotenv()
+
+
+client = motor.motor_asyncio.AsyncIOMotorClient(os.environ["MONGODB_URL"])
+db = client.testTrufa
+
 
 
 app = FastAPI()
@@ -31,8 +36,13 @@ async def read_root() -> dict:
 
 @app.post("/singin")
 async def singin(email:dict) :
-    print(email)
-    return f"asdf {email}"
+
+    if (user := await db["users"].find_one({"email": email.get("email")})) is not None:
+        return f"""{email.get("email")} exists"""
+    print(email.get("email"))
+    insert = await db["users"].insert_one({"email": email.get("email") })
+    print(insert)
+    return f"created {email}"
 
 
 @app.post("/test")
