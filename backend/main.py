@@ -1,23 +1,34 @@
 #uvicorn main:app --reload
 import os
-from fastapi import FastAPI, Response
+from datetime import timedelta
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 
 from dotenv import load_dotenv
 import motor.motor_asyncio
+from fastapi.requests import Request
+from fastapi.security import OAuth2PasswordRequestForm
+from fastapi_login.exceptions import InvalidCredentialsException
+from fastapi_login import LoginManager
+from starlette.responses import Response
+
 load_dotenv()
 
+SECRET = os.getenv("FASTAPI_LOGIN_SECRET")
 
-client = motor.motor_asyncio.AsyncIOMotorClient(os.environ["MONGODB_URL"])
+client = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("MONGODB_URL"))
 db = client.testTrufa
 
 
 
 app = FastAPI()
 
-origins = [
-    "https://arye321-fastapi-with-fetech-q7w55v47hxv9x-3000.githubpreview.dev"
-]
+origins = ["https://arye321-fastapi-with-fetech-q7w55v47hxv9x-3000.githubpreview.dev"]
+
+manager = LoginManager(SECRET, token_url='/auth/token', use_cookie=True)
+
+manager.useRequest(app)
+
 
 
 app.add_middleware(
@@ -29,15 +40,25 @@ app.add_middleware(
 )
 
 
+@app.get('/showcase')
+def showcase(request: Request):
+    # None if unauthorized
+    user = request.state.user
+    return f"{user}"
+
 @app.get("/")
 async def read_root() -> dict:
     return {"message": "Welcome to your todo list."}
 
 
 @app.post("/singin")
-async def singin(email:dict) :
+async def singin(response: Response,email:dict) :
 
     if (user := await db["users"].find_one({"email": email.get("email")})) is not None:
+        short_token = manager.create_access_token(
+            data=dict(sub=email), expires=timedelta(days=1)
+        )
+        manager.set_cookie(response, short_token)
         return f"""{email.get("email")} exists"""
     print(email.get("email"))
     insert = await db["users"].insert_one({"email": email.get("email") })

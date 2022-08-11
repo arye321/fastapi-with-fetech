@@ -4,11 +4,11 @@ import GoogleLoginMain from "./GoogleLoginMain";
 
 function App() {
   const [user, setuser] = useState('xd');
-  const [count, setCount] = useState(1);
+
 
   const submited = async (e) =>{
     e.preventDefault();
-    setCount(count+1)
+
     await fetch('/cookie', {
       method: "POST",
             headers: {

@@ -1,7 +1,7 @@
 {
   "name": "frontend",
   "proxy": "https://arye321-fastapi-with-fetech-q7w55v47hxv9x-8000.githubpreview.dev",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": false,
   "dependencies": {
     "@react-oauth/google": "^0.2.6",
