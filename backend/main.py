@@ -29,6 +29,11 @@ manager = LoginManager(SECRET, token_url='/auth/token', use_cookie=True)
 
 manager.useRequest(app)
 
+@manager.user_loader()
+async def load_user(email: str):  # could also be an asynchronous function
+    user = await db["users"].find_one({"email": email.get("email")})
+
+    return user
 
 
 app.add_middleware(
@@ -44,7 +49,7 @@ app.add_middleware(
 def showcase(request: Request):
     # None if unauthorized
     user = request.state.user
-    return f"{user}"
+    return f"{user.get('email')}"
 
 @app.get("/")
 async def read_root() -> dict:
