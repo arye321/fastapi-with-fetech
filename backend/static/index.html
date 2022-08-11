@@ -12,8 +12,15 @@
     
     <form id="myForm2" onsubmit="event.preventDefault(); auth();">
         <label for="fname">Auth</label><br>
-        <!-- <input type="text" id="fname" name="fname" value="John"><br> -->
+       
         <input type="submit" value="Auth">
+    </form> 
+    <br>
+    <br>
+    <form id="myForm2" onsubmit="event.preventDefault(); show();">
+        <label for="fname">Show</label><br>
+ 
+        <input type="submit" value="Show">
     </form> 
 </div>
 </body>
@@ -36,6 +43,16 @@
         
         console.log('auth')
         const login = "/protected";
+
+        fetch(login, {
+            method: "GET"
+        })
+            .then((response) =>response.json()).then(x=>{console.log(x)})
+    }
+    function show() {
+        
+        console.log('auth')
+        const login = "/showcase";
 
         fetch(login, {
             method: "GET"
