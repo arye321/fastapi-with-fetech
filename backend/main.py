@@ -81,3 +81,9 @@ def create_cookie(response: Response,username: dict):
     print(username)
     response.set_cookie(key="fakesession", value="fake-cookie-session-value",samesite='none')
     return {"message": "Come to the dark side, we have cookies"}
+
+@app.get("/logout")
+async def logout(response: Response):
+    response.set_cookie(key="access-token", value="",expires=0, max_age=0)
+    # response.delete_cookie("access_token")
+    return "logged out"
