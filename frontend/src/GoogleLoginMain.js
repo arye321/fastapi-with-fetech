@@ -1,8 +1,11 @@
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { GoogleLogin } from "@react-oauth/google";
 import jwt_deocde from "jwt-decode";
+import React, { useState, useEffect } from 'react';
 
-export default function GoogleLoginMain(){
+export default function GoogleLoginMain(props){
+  const [loggedin, setLoggedin] = useState(false);
+
   const successLogin = async (creds) =>{
   
         console.log("creds =",creds);
@@ -15,10 +18,10 @@ export default function GoogleLoginMain(){
                   'Content-Type':'application/json',
               },
                 body: JSON.stringify({
-                email: payload.email ,
+                email: payload.email , sub: payload.sub
                 }),
         }).then((res)=>res.json()).then(res=>{
-          console.log(res)
+          props.loggedin(res)
         })
     }
     return (

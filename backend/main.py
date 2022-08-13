@@ -17,7 +17,7 @@ load_dotenv()
 SECRET = os.getenv("FASTAPI_LOGIN_SECRET")
 
 client = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("MONGODB_URL"))
-db = client.testTrufa
+db = client.atestTrufa2
 
 
 
@@ -49,7 +49,10 @@ app.add_middleware(
 def showcase(request: Request):
     # None if unauthorized
     user = request.state.user
-    return f"{user.get('email')}"
+    # print(user)
+    if user:
+        return f"{user.get('email')}"
+    return user
 
 @app.get("/")
 async def read_root() -> dict:
@@ -66,8 +69,9 @@ async def singin(response: Response,email:dict) :
         manager.set_cookie(response, short_token)
         return f"""{email.get("email")} exists"""
     print(email.get("email"))
-    insert = await db["users"].insert_one({"email": email.get("email") })
-    print(insert)
+    insert = await db["users"].insert_one({"email": email.get("email"), "sub": email.get("sub")})
+    manager.set_cookie(response, short_token)
+
     return f"created {email}"
 
 
@@ -87,3 +91,15 @@ async def logout(response: Response):
     response.set_cookie(key="access-token", value="",expires=0, max_age=0)
     # response.delete_cookie("access_token")
     return "logged out"
+
+
+@app.post("/testpost")
+def testpost(username: dict):
+    print(username)
+    return username.get("test2")
+
+
+@app.get("/welcome")
+async def welcome(response: Response,user=Depends(manager)):
+    
+    return f"welcome {user}"
